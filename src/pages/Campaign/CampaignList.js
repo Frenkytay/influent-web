@@ -216,7 +216,7 @@ function CampaignList() {
 
   const handleCompleteCampaign = (campaignId) => {
     setConfirmTitle("Selesaikan Kampanye");
-    setConfirmMessage("Apakah Anda yakin ingin menyelesaikan kampanye ini? Pastikan semua deliverables sudah diterima.");
+    setConfirmMessage("Apakah Anda yakin ingin menyelesaikan kampanye ini? Pastikan semua pekerjaan sudah diterima.");
     setOnConfirm(() => async () => {
        try {
           await campaignService.completeCampaign(campaignId);
