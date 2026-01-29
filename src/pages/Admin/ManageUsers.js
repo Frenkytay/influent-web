@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Sidebar, Topbar } from '../../components/common';
+import { useToast } from '../../hooks/useToast';
 import {
   Box,
   Typography,
@@ -50,6 +51,7 @@ import adminService from '../../services/adminService';
 
 function ManageUsers() {
   const theme = useTheme();
+  const { showToast } = useToast();
   const isDesktop = useMediaQuery('(min-width:1000px)');
   const [sidebarOpen, setSidebarOpen] = useState(isDesktop);
 
@@ -61,7 +63,7 @@ function ManageUsers() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [successMessage, setSuccessMessage] = useState('');
+
   
   // Pagination
   const [page, setPage] = useState(1);
@@ -147,7 +149,8 @@ function ManageUsers() {
       setSubmitting(true);
       console.log(userToDelete);
       await adminService.users.deleteUser(userToDelete.user_id);
-      setSuccessMessage('Pengguna berhasil dihapus');
+
+      showToast('Pengguna berhasil dihapus', 'success');
       setShowDeleteDialog(false);
       setUserToDelete(null);
       loadUsers();
@@ -250,7 +253,9 @@ function ManageUsers() {
 
       await adminService.students.verifyStudent(payload);
       
-      setSuccessMessage(`Mahasiswa berhasil ${action === 'approve' ? 'diverifikasi' : 'ditolak'}`);
+
+      
+      showToast(`Mahasiswa berhasil ${action === 'approve' ? 'diverifikasi' : 'ditolak'}`, 'success');
       setShowVerifyModal(false);
       setVerificationData(null);
       loadUsers(); // Refresh list
@@ -327,11 +332,7 @@ function ManageUsers() {
               {error}
             </Alert>
           )}
-          {successMessage && (
-            <Alert severity="success" sx={{ mb: 3 }} onClose={() => setSuccessMessage('')}>
-              {successMessage}
-            </Alert>
-          )}
+
 
           {/* Filters */}
           <Paper sx={{ p: 3, mb: 3, borderRadius: 3, border: '1px solid #e2e8f0' }}>
@@ -750,7 +751,7 @@ function ManageUsers() {
                 disabled={submitting}
                 sx={{ textTransform: 'none' }}
               >
-                Cancel
+                Batal
               </Button>
               <Button
                 onClick={confirmDelete}

@@ -316,31 +316,24 @@ function CampaignCreate() {
         }
     }
 
-    // 2. Validasi Deadline Registrasi vs Submit Konten (min +1 day)
+    // 2. Validasi Deadline Registrasi vs Submit Konten (min +1 minggu)
     if (regDate && subDate) {
-       if (subDate <= regDate) {
-          errors.push('Deadline Submit Konten harus setelah Deadline Registrasi (Min +1 Hari)');
+       const minSubDate = new Date(regDate);
+       minSubDate.setDate(minSubDate.getDate() + 7);
+       
+       if (subDate < minSubDate) {
+          errors.push('Deadline Submit Konten harus minimal 1 minggu setelah Deadline Registrasi');
        }
     }
 
-    // 3. Validasi Deadline Submit Konten vs Selesai (End Date) (min +5 working days)
+    // 3. Validasi Deadline Submit Konten vs Selesai (End Date) (min +1 minggu)
     if (subDate && endDate) {
-      if (endDate <= subDate) {
-         errors.push('Tanggal Selesai harus setelah Deadline Submit Konten');
-      } else {
-          // Calculate workdays diff
-          let workDays = 0;
-          let tempDate = new Date(subDate);
-          while (tempDate < endDate) {
-             tempDate.setDate(tempDate.getDate() + 1);
-             if (tempDate.getDay() !== 0 && tempDate.getDay() !== 6) {
-                workDays++;
-             }
-          }
-          if (workDays < 5) {
-             errors.push('Tanggal Selesai minimal 5 hari kerja setelah Deadline Submit Konten');
-          }
-      }
+       const minEndDate = new Date(subDate);
+       minEndDate.setDate(minEndDate.getDate() + 7);
+
+       if (endDate < minEndDate) {
+          errors.push('Tanggal Selesai minimal 1 minggu setelah Deadline Submit Konten');
+       }
     }
 
     if (errors.length > 0) {
@@ -845,6 +838,13 @@ function CampaignCreate() {
      return d.toISOString().split('T')[0];
   };
 
+  const addWeeks = (dateStr, weeks) => {
+     if (!dateStr) return '';
+     const d = new Date(dateStr);
+     d.setDate(d.getDate() + (weeks * 7));
+     return d.toISOString().split('T')[0];
+  };
+
   const addWorkDays = (dateStr, days) => {
      if (!dateStr) return '';
      const d = new Date(dateStr);
@@ -860,8 +860,8 @@ function CampaignCreate() {
 
   const renderStep4 = () => {
     const minRegDate = getTomorrow();
-    const minSubmitDate = start_date ? getNextDay(start_date) : ''; 
-    const minEndDate = submission_deadline ? addWorkDays(submission_deadline, 5) : '';
+    const minSubmitDate = start_date ? addWeeks(start_date, 1) : ''; 
+    const minEndDate = submission_deadline ? addWeeks(submission_deadline, 1) : '';
 
     return (
     <Grid container spacing={4}>
@@ -874,7 +874,7 @@ function CampaignCreate() {
                 
                 <Stack spacing={3} sx={{ mt: 2 }}>
                    <Box>
-                      <Typography variant="caption" fontWeight={700} color="textSecondary" sx={{ mb: 1, display: 'block', textTransform: 'uppercase' }}>Fase Registrasi & Submisi</Typography>
+                      <Typography variant="caption" fontWeight={700} color="textSecondary" sx={{ mb: 1, display: 'block', textTransform: 'uppercase' }}>Fase Registrasi & Pengumpulan</Typography>
                       <Stack direction="column" spacing={3}>
                          <TextField 
                              label="Tenggat Waktu Registrasi Campaign" 
@@ -882,29 +882,47 @@ function CampaignCreate() {
                              InputLabelProps={{shrink:true}} 
                              fullWidth 
                              value={start_date} 
-                             onChange={e => setStartDate(e.target.value)} 
+                             onChange={e => {
+                                setStartDate(e.target.value);
+                                // If submission date is invalid (less than new min date) or empty, auto-set it
+                                const newMinDate = addWeeks(e.target.value, 1);
+                                if (submission_deadline && submission_deadline < newMinDate) {
+                                   setSubmissionDeadline(newMinDate);
+                                } else if (!submission_deadline && e.target.value) {
+                                   setSubmissionDeadline(newMinDate);
+                                }
+                             }} 
                              disabled={isReadOnly} 
                              required 
                              inputProps={{ min: minRegDate }}
                              helperText={
                                 <Typography variant="caption" color="textSecondary" sx={{ display:'block', mt:0.5, lineHeight:1.3 }}>
-                                   Beri jarak waktu yang cukup untuk: Admin melakukan tinjauan, Proses pembayaran oleh UMKM, dan Influencer mendaftar kampanye.
+                                   Beri jarak waktu yang cukup untuk: Admin melakukan tinjauan, proses pembayaran oleh UMKM, dan Influencer mendaftar kampanye.
                                 </Typography>
                              }
                          />
                          <TextField 
-                             label="Tenggat Waktu Submit Konten" 
+                             label="Tenggat Waktu Pengumpulan Konten" 
                              type="date" 
                              InputLabelProps={{shrink:true}} 
                              fullWidth 
                              value={submission_deadline} 
-                             onChange={e => setSubmissionDeadline(e.target.value)} 
+                             onChange={e => {
+                                setSubmissionDeadline(e.target.value);
+                                // Check if end_date needs update
+                                const newMinEndDate = addWeeks(e.target.value, 1);
+                                if (end_date && end_date < newMinEndDate) {
+                                   setEndDate(newMinEndDate);
+                                } else if (!end_date && e.target.value) {
+                                   setEndDate(newMinEndDate);
+                                }
+                             }} 
                              disabled={isReadOnly || !start_date} 
                              required 
                              inputProps={{ min: minSubmitDate }}
                              helperText={
                                 <Typography variant="caption" color="textSecondary" sx={{ display:'block', mt:0.5, lineHeight:1.3 }}>
-                                   Digunakan sebagai waktu untuk influencer: Membuat konten, Mengunggah / mem-post konten.
+                                   Digunakan sebagai waktu untuk influencer: membuat konten, mengunggah / mem-post konten (Min 1 Minggu setalah registrasi).
                                 </Typography>
                              }
                          />
@@ -914,7 +932,7 @@ function CampaignCreate() {
                    <Box>
                       <Typography variant="caption" fontWeight={700} color="textSecondary" sx={{ mb: 1, display: 'block', textTransform: 'uppercase' }}>Fase Akhir</Typography>
                       <TextField 
-                          label="Tenggat Waktu Selesai Campaign" 
+                          label="Tenggat Waktu Selesai Kampanye" 
                           type="date" 
                           InputLabelProps={{shrink:true}} 
                           fullWidth 
@@ -925,7 +943,7 @@ function CampaignCreate() {
                           inputProps={{ min: minEndDate }}
                           helperText={
                              <Typography variant="caption" color="textSecondary" sx={{ display:'block', mt:0.5, lineHeight:1.3 }}>
-                                Beri waktu untuk: Proses revisi (jika ada) dan Pengerjaan konten yang membutuhkan waktu lebih lama.
+                                Beri waktu untuk: Proses revisi (jika ada) dan pengerjaan konten yang membutuhkan waktu lebih lama (Min 1 Minggu).
                              </Typography>
                           }
                       />
@@ -1084,7 +1102,7 @@ function CampaignCreate() {
                               Simpan Draf
                            </Button>
                            <Button variant="contained" onClick={() => handleSave(false)} disabled={loading} startIcon={<SaveIcon />} sx={{ px: 4, borderRadius: 2 }}>
-                              {loading ? 'Menyimpan...' : 'Simpan Kampanye'}
+                              {loading ? 'Menyimpan...' : 'Buat Kampanye'}
                            </Button>
                         </>
                        )

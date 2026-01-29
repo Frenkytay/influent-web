@@ -518,7 +518,7 @@ const CampaignWorkPage = () => {
                              sub.post_submission ? (
                                 <Box>
                                     <Chip 
-                                        label={sub.post_submission.status === 'verified' ? 'Posting Diverifikasi' : sub.post_submission.status === 'rejected' ? 'Posting Ditolak' : 'Posting Tertunda'} 
+                                        label={sub.post_submission.status === 'verified' ? 'Berhasil' : sub.post_submission.status === 'rejected' ? 'Ditolak' : 'Menunggu Verifikasi'} 
                                         color={sub.post_submission.status === 'verified' ? 'success' : sub.post_submission.status === 'rejected' ? 'error' : 'warning'}
                                         variant="outlined"
                                         size="small"
@@ -665,20 +665,20 @@ const CampaignWorkPage = () => {
             
             {!viewMode && (
               <>
-                <Button 
+                {/* <Button 
                   variant="outlined" 
                   onClick={() => handleSave('draft')}
                   disabled={submitting}
                 >
                   Simpan sebagai Draf
-                </Button>
+                </Button> */}
                 <Button 
                   variant="contained" 
                   onClick={() => handleSave('final')}
                   disabled={submitting}
                   sx={{ bgcolor: '#6E00BE' }}
                 >
-                  Kirim Final
+                  Kirim
                 </Button>
               </>
             )}

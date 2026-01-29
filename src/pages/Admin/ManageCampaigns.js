@@ -1675,34 +1675,34 @@ function ManageCampaigns() {
           >
             <DialogTitle sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <WarningIcon sx={{ color: '#ef4444' }} />
-              <Typography sx={{ fontWeight: 700, fontSize: 18 }}>Tolak Campaign</Typography>
+              <Typography sx={{ fontWeight: 700, fontSize: 18 }}>Tolak Kampanye</Typography>
             </DialogTitle>
             <DialogContent dividers>
               <Typography sx={{ color: '#6c757d', fontSize: 15, mb: 3 }}>
-                Pilih alasan pembatalan campaign <strong>{selectedCampaign?.title}</strong>:
+                Pilih alasan pembatalan kampanye <strong>{selectedCampaign?.title}</strong>:
               </Typography>
               
               <Stack spacing={2}>
                 <Box 
-                  onClick={() => setCancellationReason('Konten campaign tidak sesuai dengan panduan komunitas')}
+                  onClick={() => setCancellationReason('Konten kampanye tidak sesuai dengan panduan komunitas')}
                   sx={{
                     p: 2,
-                    border: cancellationReason === 'Konten campaign tidak sesuai dengan panduan komunitas' ? '2px solid #ef4444' : '1px solid #e2e8f0',
+                    border: cancellationReason === 'Konten kampanye tidak sesuai dengan panduan komunitas' ? '2px solid #ef4444' : '1px solid #e2e8f0',
                     borderRadius: 2,
                     cursor: 'pointer',
-                    bgcolor: cancellationReason === 'Konten campaign tidak sesuai dengan panduan komunitas' ? '#fff5f5' : '#fff',
+                    bgcolor: cancellationReason === 'Konten kampanye tidak sesuai dengan panduan komunitas' ? '#fff5f5' : '#fff',
                     '&:hover': { bgcolor: '#f7fafc' }
                   }}
                 >
                   <Typography sx={{ fontWeight: 600, fontSize: 14 }}>Konten tidak sesuai panduan</Typography>
-                  <Typography sx={{ fontSize: 13, color: '#6c757d' }}>Campaign melanggar panduan komunitas</Typography>
+                  <Typography sx={{ fontSize: 13, color: '#6c757d' }}>kampanye melanggar panduan komunitas</Typography>
                 </Box>
 
                 <Box 
-                  onClick={() => setCancellationReason('Informasi campaign tidak lengkap atau tidak jelas')}
+                  onClick={() => setCancellationReason('Informasi kampanye tidak lengkap atau tidak jelas')}
                   sx={{
                     p: 2,
-                    border: cancellationReason === 'Informasi campaign tidak lengkap atau tidak jelas' ? '2px solid #ef4444' : '1px solid #e2e8f0',
+                    border: cancellationReason === 'Informasi kampanye tidak lengkap atau tidak jelas' ? '2px solid #ef4444' : '1px solid #e2e8f0',
                     borderRadius: 2,
                     cursor: 'pointer',
                     bgcolor: cancellationReason === 'Informasi campaign tidak lengkap atau tidak jelas' ? '#fff5f5' : '#fff',
@@ -1710,7 +1710,7 @@ function ManageCampaigns() {
                   }}
                 >
                   <Typography sx={{ fontWeight: 600, fontSize: 14 }}>Informasi tidak lengkap</Typography>
-                  <Typography sx={{ fontSize: 13, color: '#6c757d' }}>Detail campaign kurang jelas atau tidak memadai</Typography>
+                  <Typography sx={{ fontSize: 13, color: '#6c757d' }}>Detail kampanye kurang jelas atau tidak memadai</Typography>
                 </Box>
 
                 <Box 
@@ -1724,7 +1724,7 @@ function ManageCampaigns() {
                     '&:hover': { bgcolor: '#f7fafc' }
                   }}
                 >
-                  <Typography sx={{ fontWeight: 600, fontSize: 14 }}>Budget tidak sesuai</Typography>
+                  <Typography sx={{ fontWeight: 600, fontSize: 14 }}>Anggaran tidak sesuai</Typography>
                   <Typography sx={{ fontSize: 13, color: '#6c757d' }}>Kompensasi tidak memenuhi standar minimum</Typography>
                 </Box>
 
@@ -1795,7 +1795,7 @@ function ManageCampaigns() {
                   '&:hover': { bgcolor: '#dc2626' }
                 }}
               >
-                {submitting ? <CircularProgress size={24} /> : 'Batalkan Campaign'}
+                {submitting ? <CircularProgress size={24} /> : 'Tolak Kampanye'}
               </Button>
             </DialogActions>
           </Dialog>
@@ -1823,7 +1823,7 @@ function ManageCampaigns() {
                 disabled={submitting}
                 sx={{ textTransform: 'none' }}
               >
-                Cancel
+                Batal
               </Button>
               <Button
                 onClick={confirmDelete}

@@ -512,7 +512,7 @@ function BrowseCampaigns() {
             </Box>
 
             {/* Influencer Category Filter - Multi-Select */}
-            <Box sx={{ position: 'relative' }}>
+            {/* <Box sx={{ position: 'relative' }}>
               <Button
                 onClick={() => {
                   setShowInfluencerCategoryFilter(!showInfluencerCategoryFilter);
@@ -567,7 +567,7 @@ function BrowseCampaigns() {
                   </Box>
                 </Paper>
               )}
-            </Box>
+            </Box> */}
           </Box>
 
           {/* Loading State - Skeleton Cards */}

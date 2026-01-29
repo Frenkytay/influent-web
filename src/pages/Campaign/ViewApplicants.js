@@ -224,7 +224,7 @@ function ViewApplicants() {
     const applicant = applicants.find(a => a.id === applicantId);
     setModalConfig({
       title: 'Tolak Pelamar',
-      message: `Apakah Anda yakin ingin menolak ${applicant.fullName} (${applicant.influencerName})? Tindakan ini dapat dibatalkan nanti.`,
+      message: `Apakah Anda yakin ingin menolak ${applicant.fullName} (${applicant.influencerName})? Tindakan ini tidak dapat dibatalkan nanti.`,
       action: () => confirmReject(applicantId),
       variant: 'danger'
     });

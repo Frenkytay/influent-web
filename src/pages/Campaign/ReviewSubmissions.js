@@ -186,7 +186,7 @@ const ReviewSubmissions = () => {
       switch (reviewModal.action) {
         case 'approve':
           await workSubmissionService.approveSubmission(subId, reviewNotes);
-          showToast ? showToast('Submission disetujui!', 'success') : toast.success('Submission disetujui!');
+          showToast ? showToast('Pengumpulan disetujui!', 'success') : toast.success('Pengumpulan disetujui!');
           break;
         case 'reject':
           if (!reviewNotes.trim()) {
@@ -194,7 +194,7 @@ const ReviewSubmissions = () => {
             return;
           }
           await workSubmissionService.rejectSubmission(subId, reviewNotes);
-          showToast ? showToast('Submission ditolak', 'warning') : toast.warning('Submission ditolak');
+          showToast ? showToast('Pengumpulan ditolak', 'warning') : toast.warning('Pengumpulan ditolak');
           break;
         case 'revision':
           if (!reviewNotes.trim()) {
@@ -202,7 +202,7 @@ const ReviewSubmissions = () => {
             return;
           }
           await workSubmissionService.requestRevision(subId, reviewNotes);
-          showToast ? showToast('Request revisi dikirim', 'info') : toast.info('Request revisi dikirim');
+          showToast ? showToast('Permintaan revisi dikirim', 'info') : toast.info('Permintaan revisi dikirim');
           break;
         default:
           break;
@@ -212,7 +212,7 @@ const ReviewSubmissions = () => {
       handleCloseReviewModal();
     } catch (error) {
       console.error('Error submitting review:', error);
-      showToast ? showToast('Gagal melakukan review', 'error') : toast.error('Gagal melakukan review');
+      showToast ? showToast('Gagal melakukan ulasan', 'error') : toast.error('Gagal melakukan ulasan');
     } finally {
       setIsLoading(false);
     }
